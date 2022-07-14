@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def adjust_gamma(image, gamma=2.0):
+def adjust_gamma(image, gamma=1.0):
     inv_gamma = 1.0 / gamma
 
     # build lookup table, based on corrected values
@@ -11,8 +11,18 @@ def adjust_gamma(image, gamma=2.0):
 
 # video capture
 video_capture = cv2.VideoCapture(0)
-ret, frame = video_capture.read()
 
-final = adjust_gamma(frame)
-cv2.imshow("Gamma", final)
-cv2.waitKey(5000)
+g = 1.0
+while (True):
+	ret, frame = video_capture.read()
+	final = adjust_gamma(frame, g)
+	cv2.imshow("Gamma", final)
+	k = cv2.waitKey(33)
+	if k == ord('.'):
+		g += 0.2
+		print("Gamma: %.1f" % g)
+	if k == ord(','):
+		g -= 0.2
+		print("Gamma: %.1f" % g)
+	if k == ord('q'):
+		exit()	
